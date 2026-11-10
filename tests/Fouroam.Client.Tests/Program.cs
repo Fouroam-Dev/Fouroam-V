@@ -1,3 +1,4 @@
+using System;
 using Fouroam.Client.Core;
 
 static void Check(bool valid, string description)
