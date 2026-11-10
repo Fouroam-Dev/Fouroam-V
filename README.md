@@ -1,83 +1,48 @@
-<div align="center">
-
 # Fouroam-V
 
 **Four friends. One world.**
 
-An open-source project exploring private, self-hosted co-op sessions for up to four friends in Grand Theft Auto V.
+Independent open-source research into private networking, with a first **GTA V Story Mode UI prototype**.
 
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![Stage: Concept](https://img.shields.io/badge/stage-concept-orange.svg)
-![Platform: Windows](https://img.shields.io/badge/platform-Windows-lightgrey.svg)
+![Status](https://img.shields.io/badge/status-pre--alpha-orange)
+[![Build](https://github.com/Fouroam-Dev/Fouroam-V/actions/workflows/game-client.yml/badge.svg)](https://github.com/Fouroam-Dev/Fouroam-V/actions/workflows/game-client.yml)
+[![MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-[English](README.md) · [Português](README.pt-BR.md) · [Roadmap](ROADMAP.md) · [Contributing](CONTRIBUTING.md)
+[Português](README.pt-BR.md) · [Installation](docs/INSTALL-STORY-MODE.md) · [Roadmap](ROADMAP.md)
 
-</div>
+> **Not a multiplayer mod.** This initial in-game client is a **local Story Mode menu only**. It does not connect the GTA V game to other players or synchronize gameplay. Our independent [Fouroam Server](https://github.com/Fouroam-Dev/Fouroam-Server) has a working external TCP/TLS network test client, but the game client is not connected to it.
 
-> [!IMPORTANT]
-> **Project status: concept / pre-alpha.** The repository currently contains documentation and project setup, **not a downloadable or playable co-op client/server**. The features below describe goals, not finished functionality.
+## In-game client prototype
 
-## What is Fouroam-V?
+- Original **C# .NET Framework 4.8** ScriptHookVDotNet3 script (build-time NuGet API dependency).
+- Press **F7** to open/close a dark/blue panel within Story Mode.
+- Up/Down, Enter and Escape navigate **Status**, **Local Diagnostics**, **About**, **Close**.
+- Shared menu state is independent of the game (.NET Standard 2.0); navigation is tested without GTA V.
+- GitHub Actions builds a package containing only **Fouroam.GameClient.dll**, **Fouroam.Client.Core.dll**, license and setup instructions. No copyrighted game files or third-party runtime libraries are included.
 
-Fouroam-V aims to make it easy for a small group of friends to host a **private cooperative session** without renting a dedicated game server or using a public server browser.
+[Read the installation guide](docs/INSTALL-STORY-MODE.md). **Actual in-game compatibility has not yet been verified**, even if CI compilation passes.
 
-The proposed experience is straightforward:
+## Architecture
 
-1. One player hosts a lightweight session on their own Windows PC.
-2. Up to three friends connect over a local network (LAN) or a private VPN, such as Radmin VPN.
-3. The group explores and plays together in a shared session.
+~~~text
+src/Fouroam.Client.Core/       Menu navigation and state machine (netstandard2.0)
+src/Fouroam.GameClient/        ScriptHookVDotNet3 UI entrypoint (net48)
+tests/Fouroam.Client.Tests/    Pure menu tests (net10.0)
+.github/workflows/            Windows build and temporary DLL artifact
+~~~
 
-An optional VPS or dedicated machine could also host the server, but **paid hosting is not part of the requirement**. A purchased, legitimate copy of GTA V would still be required by each player.
+## Game integration restrictions
 
-## Project goals
+We used [RAGECOOP-V](https://github.com/RAGECOOP/RAGECOOP-V) as a public architectural reference without copying its source.
 
-| Capability | Current status |
-| --- | --- |
-| Private sessions for up to four players | Planned |
-| Local, player-hosted server | Planned |
-| LAN and VPN-based connections | Planned |
-| Player position and movement synchronization | Research / planned |
-| Vehicles, world events and NPC synchronization | Research / planned |
-| Connection recovery and session stability | Planned |
-| Shared objectives and mission experiments | Feasibility and permission review required |
-| Steam / Epic Games achievement integration | Not supported or promised |
+Rockstar's **September 2026 mod guidelines restrict multiplayer mods to officially licensed platforms**. Accordingly, this module deliberately has **no in-game networking, game sync, GTA Online access, mission changes, or DRM/anti-cheat workarounds**. We will evaluate permitted paths before further game integration.
 
-**Nothing in this table is implemented yet.** The first milestone is a small, authorized network-synchronization proof of concept.
+[Official Rockstar modification guidelines](https://www.rockstargames.com/br/community-resources/mod-guidelines)
 
-## Why a self-hosted approach?
+## Legal notice
 
-- **Small groups first:** optimize for one host and at most three guests.
-- **No required central service:** avoid accounts, public lobbies or a mandatory online backend.
-- **Transparent and open source:** make the project's original code inspectable and contribution-friendly.
-- **Practical networking:** allow local connections or private VPN networks without promising universal NAT traversal.
-
-## Planned technical direction
-
-The architecture has **not** been finalized. Initial research is focused on:
-
-- A lightweight Windows host/server process, potentially built with C# and .NET.
-- A game-side client, with its implementation dependent on a lawful and compatible integration method.
-- An authoritative session host for shared state.
-- Efficient state synchronization with reliability and disconnect handling.
-
-No builds, installers, protocol specifications or server commands exist yet. See the [roadmap](ROADMAP.md) for the development sequence.
-
-## Contributing
-
-Development discussions, bug reports about repository content and technical proposals are welcome. Read the [contribution guide](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [security policy](SECURITY.md) before contributing.
-
-- [Open an issue](https://github.com/Fouroam-Dev/Fouroam-V/issues)
-- [Read the roadmap](ROADMAP.md)
-- [View the source](https://github.com/Fouroam-Dev/Fouroam-V)
-
-## Legal and third-party notice
-
-Fouroam-V is an **independent, unofficial community project** and is not affiliated with, endorsed by or sponsored by Rockstar Games, Take-Two Interactive, Valve or Epic Games.
-
-**Grand Theft Auto V, GTA V and associated assets belong to their respective owners.** The MIT license below covers original code and documentation in this repository only. It does **not** grant any right to GTA V game assets, trademarks, game code, official story content, platform services or third-party components.
-
-Multiplayer modification, modification of official missions and distribution may be restricted by the game's terms and applicable policies. **Implementation and release require a review of relevant permissions and rules first.** Do not contribute copyrighted game files, leaked assets, authentication bypasses, anti-cheat bypasses or pirated content.
+Fouroam is independent and is not affiliated with or endorsed by Rockstar Games, Take-Two Interactive or RAGECOOP. GTA V, ScriptHookVDotNet and Script Hook V are third-party products and are not distributed here.
 
 ## License
 
-Original project code and documentation are licensed under the [MIT License](LICENSE), subject to third-party rights and applicable terms.
+[MIT](LICENSE) covers only original Fouroam Dev source and documentation.

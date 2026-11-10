@@ -1,0 +1,52 @@
+name: Fouroam Game Client (Story Mode UI)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-game-client:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore
+        run: dotnet restore Fouroam-V.slnx
+      - name: Build
+        run: dotnet build Fouroam-V.slnx -c Release --no-restore
+      - name: Test menu logic
+        run: dotnet run --project tests/Fouroam.Client.Tests -c Release --no-build
+      - name: Package our two DLLs only
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $dest = Join-Path $env:RUNNER_TEMP 'fouroam-game-client'
+          New-Item -ItemType Directory -Path $dest | Out-Null
+          Copy-Item src/Fouroam.GameClient/bin/Release/net48/Fouroam.GameClient.dll $dest
+          Copy-Item src/Fouroam.Client.Core/bin/Release/netstandard2.0/Fouroam.Client.Core.dll $dest
+          Copy-Item docs/INSTALL-STORY-MODE.md (Join-Path $dest 'LEIA-ME.md')
+          Copy-Item LICENSE (Join-Path $dest 'LICENSE.txt')
+          $expected = @('Fouroam.GameClient.dll', 'Fouroam.Client.Core.dll', 'LEIA-ME.md', 'LICENSE.txt')
+          $actual = @(Get-ChildItem $dest -File | Select-Object -ExpandProperty Name)
+          if (@(Compare-Object $expected $actual).Count -ne 0) { throw 'Unexpected files in package.' }
+          $sums = foreach ($name in @('Fouroam.GameClient.dll', 'Fouroam.Client.Core.dll')) {
+            $sha = (Get-FileHash (Join-Path $dest $name) -Algorithm SHA256).Hash
+            "$sha  $name"
+          }
+          Set-Content (Join-Path $dest SHA256SUMS.txt) $sums
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Fouroam-V-StoryMode-UI-prealpha
+          path: ${{ runner.temp }}/fouroam-game-client/
+          retention-days: 7
+          if-no-files-found: error

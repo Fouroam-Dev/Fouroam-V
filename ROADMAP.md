@@ -1,48 +1,38 @@
-# Fouroam-V Roadmap
+# Fouroam-V — Roadmap
 
-This roadmap describes **proposed milestones**, not delivery commitments. The project is currently a concept, and no playable build exists.
+## Fase 0: Base externa de rede
 
-## Phase 0 — Feasibility and permission review
+- [x] Criar [Fouroam Server](https://github.com/Fouroam-Dev/Fouroam-Server) com sessão de 4 jogadores, autenticação TLS, chat e comandos do host.
+- [x] Testar servidor e cliente externos em um computador Windows.
+- [ ] Testar comunicação em dois computadores físicos, via LAN/VPN.
 
-- [ ] Review Rockstar / Take-Two rules for multiplayer mods and changes to official story missions.
-- [ ] Identify a permitted way to integrate a client with the game.
-- [ ] Document dependencies, their licenses and any third-party limitations.
-- [ ] Define supported GTA V edition(s), operating systems and game build compatibility.
+## Fase 1: Interface local no modo História
 
-**Gate:** Do not distribute a game-integrated client or copyrighted game assets before permissions and compatibility are understood.
+- [x] Criar script C# ScriptHookVDotNet3 direcionado ao .NET Framework 4.8.
+- [x] Desenhar menu próprio em azul/preto e navegação F7/setas/Enter/Esc.
+- [x] Isolar lógica de menu e escrever testes sem dependência do jogo.
+- [x] Adicionar build Windows e pacote de DLL no GitHub Actions.
+- [ ] Confirmar compilação e testes no GitHub Actions.
+- [ ] Testar manualmente em GTA V Story Mode compatível.
 
-## Phase 1 — Standalone network prototype
+## Fase 2: Permissões e compatibilidade
 
-- [ ] Create a minimal self-hosted server prototype independent of GTA V.
-- [ ] Connect two peers over LAN and a private VPN.
-- [ ] Exchange position/state updates, measure latency and packet loss.
-- [ ] Test session shutdown and reconnect behavior.
+- [x] Analisar a arquitetura pública do RAGECOOP-V.
+- [x] Localizar as diretrizes de mods de setembro de 2026 da Rockstar.
+- [ ] Determinar uma integração multijogador licenciada/autorizada, se disponível.
+- [ ] Definir compatibilidade de Legacy/Enhanced e versões específicas.
+- [ ] Garantir uma revisão de segurança e licenças antes de distribuição pública.
 
-## Phase 2 — Authorized game-side proof of concept
+## Fase 3: Simulador independente
 
-- [ ] Demonstrate two participants in a shared test environment using an authorized integration method.
-- [ ] Evaluate character and animation state synchronization.
-- [ ] Establish host authority and basic security boundaries.
+- [ ] Implementar sincronização de posições e interpolação em simulador **fora do GTA V**.
+- [ ] Testar movimentação de dois participantes e recuperação de conexão.
+- [ ] Verificar desempenho, latência e limites de autoridade do host.
+- [ ] Avaliar integração em motor/plataforma autorizada somente após revisão de permissões.
 
-## Phase 3 — Four-player private sessions
+## Fora do escopo atual
 
-- [ ] Support a maximum of four peers.
-- [ ] Evaluate vehicle and NPC/world synchronization.
-- [ ] Document LAN, VPN and optional VPS deployment.
-- [ ] Add structured logs, version compatibility checks and recovery tests.
-
-## Phase 4 — Cooperative gameplay research
-
-- [ ] Explore original, user-created objectives and shared activities.
-- [ ] Review whether official story content can be supported lawfully.
-- [ ] Evaluate save and checkpoint consistency without claiming official platform achievement support.
-
-## Non-goals for the initial prototype
-
-- Public multiplayer server browser.
-- Paid hosting platform or mandatory account service.
-- GTA Online compatibility.
-- Circumventing authentication, anti-cheat, DRM or platform restrictions.
-- Guarantees of official GTA V story missions or Steam/Epic achievements.
-
-Milestones may be reordered or cancelled based on technical and legal findings.
+- GTA Online ou modificação de serviços oficiais.
+- Sincronização GTA V de jogadores, veículos, NPCs e missões.
+- Alterar campanhas oficiais ou contornar DRM/anti-cheat.
+- Prometer co-op no modo História sem verificação de licença.

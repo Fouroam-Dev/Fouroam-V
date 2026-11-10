@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/Fouroam.Client.Core/Fouroam.Client.Core.csproj" />
+  <Project Path="src/Fouroam.GameClient/Fouroam.GameClient.csproj" />
+  <Project Path="tests/Fouroam.Client.Tests/Fouroam.Client.Tests.csproj" />
+</Solution>
